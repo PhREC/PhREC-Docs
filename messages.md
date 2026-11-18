@@ -152,6 +152,14 @@ Requests the sensor data from a specific target node up to a designated maximum 
 
 Requests the node send an impulse to its motor.
 
+
+## 30 : Request Firmware Blind Upload
+0:5 (6b) | 6:23 (18b) | 24:31 (8b)
+--- | --- | ---
+111100 | Undefined | CRC-8
+
+Triggers the Node to switch to firmware upload mode. A node will then listen to data over UART. 
+
 # Responses
 
 ## -1 : Reserved for Empty Responses
