@@ -38,19 +38,19 @@ $$ \text{Wait Time} = \text{Node ID} \times \text{Frame Time} \times \text{Respo
 
 **Configuration:**
 - Baud Rate: 115200 bps
-- UART Frame: 1 start + 8 data + 0 parity + 0.5 stop = 9.5 bits per frame
-- Response Message Size: 32 bits + 6 bits (4 frames)
+- UART Frame: 1 start + 8 data + 0 parity + 1 stop = 10 bits per frame
+- Response Message Size: 32 bits + 8 bits (4 frames)
 
 **Calculation:**
-$$\text{Frame Time} = \frac{9.5 \text{ bits}}{115200 \text{ bps}} = 0.0824 \text{ ms}$$
+$$\text{Frame Time} = \frac{10 \text{ bits}}{115200 \text{ bps}} = 0.0868 \text{ ms}$$
 
 **Wait Times by Node ID: (0 buffer time)**
-- Node 1: `1 × 0.0824 ms × 4 frames = 0.3296 ms`
-- Node 2: `2 × 0.0824 ms × 4 frames = 0.6592 ms`
-- Node 3: `3 × 0.0824 ms × 4 frames = 0.9888 ms`
-- Node 5: `5 × 0.0824 ms × 4 frames = 1.3184 ms`
+- Node 1: `1 × 0.0868 ms × 4 frames = 0.3472 ms`
+- Node 2: `2 × 0.0868 ms × 4 frames = 0.6944 ms`
+- Node 3: `3 × 0.0868 ms × 4 frames = 1.0416 ms`
+- Node 5: `5 × 0.0868 ms × 4 frames = 1.7360 ms`
 
-This ensures each node's response is separated by ~0.3296 ms, preventing collisions.
+Each node's response is separated by ~0.0868 ms, preventing collisions.
 
 ## Requests
 
@@ -117,6 +117,7 @@ Requests the given Node ID to randomize its Node ID to an unused ID.
 
 **Response:** [-5 : Randomized Node ID Response](#-5--randomized-node-id-response)
 
+
 ## 5 : Request Sensor Depth
 0:5 (6b) | 6:23 (18b) | 24:31 (8b)
 --- | --- | --- 
@@ -125,6 +126,14 @@ Requests the given Node ID to randomize its Node ID to an unused ID.
 Requests the total number of sensors on the target node.
 
 **Response:** [-6 : Sensor Depth Response](#-6--sensor-depth-response)
+
+
+## 6 : Request Ignore n messages
+0:5 (6b) | 6:23 (18b) | 24:31 (8b)
+--- | --- | ---
+000110 | n | CRC-8
+
+Tells the nodes to ignore the next n message
 
 ## 10 : Request Sensor Data
 0:5 (6b) | 6:13 (8b) | 14:23 (10b) | 24:31 (8b)
@@ -156,9 +165,10 @@ Requests the node send an impulse to its motor.
 ## 30 : Request Firmware Blind Upload
 0:5 (6b) | 6:23 (18b) | 24:31 (8b)
 --- | --- | ---
-111100 | Undefined | CRC-8
+11110 | Undefined | CRC-8
 
-Triggers the Node to switch to firmware upload mode. A node will then listen to data over UART. 
+Triggers the Node to switch to firmware upload mode. A node will then listen to data over UART.
+
 
 # Responses
 
