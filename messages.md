@@ -1,7 +1,6 @@
 # All Supported Messages
 
-
-## Message Layout
+## Message Layout (Little-Endian)
 0:5 (6b) | 6:23 (18b) | 24:31 (8b)
 --- | :--: | ---
 Message ID | Data Fields | CRC-8
@@ -165,7 +164,7 @@ Requests the node send an impulse to its motor.
 ## 30 : Request Firmware Blind Upload
 0:5 (6b) | 6:23 (18b) | 24:31 (8b)
 --- | --- | ---
-11110 | Undefined | CRC-8
+011110 | Undefined | CRC-8
 
 Triggers the Node to switch to firmware upload mode. A node will then listen to data over UART.
 
